@@ -17,6 +17,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	 * when we override this method spring will call our method instead of the default one
 	 * it takes AuthenticationManagerBuilder which help us to configure AuthenticationManager
 	 * as we directly dont use it
+	 *
+	 * This methods does inMemoryAuthentication so for hdbc authentication use
+	 * authenticationManagerBuilder.jdbcAuthentication() method
  	 */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -55,3 +58,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return NoOpPasswordEncoder.getInstance();
 	}
 }
+
+/**
+ *
+ * << Extra Info >>
+ *
+ * H2 is an embedded database.
+ * When we add an embedded database to spring boot creates the datasource itself.
+ * Spring-security also has some default schema opinions which we can use.
+ * The way to use default schema is
+ * auth.jdbcAuthentication().dataSource(dataSource).withDefaultSchema()
+ *     .withUser(User.withUsername("abhishek").password("786").roles("admin"))
+ *      .withUser(User.withUsername("sharma").password("786").roles("user"));
+ *
+ *
+ *  To override spring boot default expectation
+ *  use methods these except query as parameter :-
+ *  authenticationManagerBuilder.usersByUsernameQuery("select ....") ,
+ *  authenticationManagerBuilder.authoritiesByUsernameQuery("select ....")
+ *
+ *
+ */
